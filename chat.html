@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat App</title>
+  <link rel="icon" type="image/png" href="th (1).png">
+  <style>
+    body {
+      background-color: aqua;
+    }
+
+    input {
+      padding: auto;
+      color: black;
+    }
+
+    #messages {
+      overflow-y: auto;
+      max-height: 300px; /* Adjust the height as needed */
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+</head>
+<body>
+  <ul id="messages"></ul>
+  <form id="messagebox" action="">
+    <input id="input" autocomplete="off" placeholder="Type something">
+    <button type="submit">Send</button>
+  </form>
+
+  <script>
+    const socket = io();
+
+    // Load the saved username on page load
+    window.onload = function() {
+      var savedUsername = localStorage.getItem("username");
+      if (savedUsername) {
+        $('#input').val(savedUsername);
+      }
+    };
+
+    $('form').submit(function(e){
+      e.preventDefault();
+      const username = localStorage.getItem("username");
+      const msg = `${username}: ${$('#input').val()}`;
+      socket.emit('chat message', msg);
+      console.log("sent");
+      $('#input').val('');
+      return false;
+    });
+
+    socket.on('chat message', function(msg){
+      displayMessage(msg);
+    });
+
+ 
+    function displayMessage(msg) {
+  const messages = $('#messages');
+  const isScrolledToBottom = messages[0].scrollHeight - messages[0].clientHeight <= messages[0].scrollTop + 1;
+
+  messages.append($('<li>').text(msg));
+
+  if (isScrolledToBottom) {
+    messages.scrollTop(messages[0].scrollHeight);
+  }
+}
+
+  </script>
+</body>
+</html>

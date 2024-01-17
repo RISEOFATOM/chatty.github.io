@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>yolo</title> 
+   <style> 
+  body{ 
+
+     background-color: black;    
+  }
+  
+  
+  </style>
+</head>
+<body>
+  <form id="login" action="/chat" method="post">
+    <input type="text" id="usernameInput" placeholder="Username">
+    <button type="button" onclick="saveUsernameAndRedirect()">Done</button>
+  </form>
+
+  <script>
+    function saveUsernameAndRedirect() {
+      var username = document.getElementById("usernameInput").value;
+      localStorage.setItem("username", username);
+      
+      // Redirect to "/chat"
+      window.location.href = "/chat";
+    }
+
+    // Load the saved username on page load (optional)
+    window.onload = function() {
+      var savedUsername = localStorage.getItem("username");
+      if (savedUsername) {
+        document.getElementById("usernameInput").value = savedUsername;
+      }
+    };
+  </script>
+</body>
+</html>
